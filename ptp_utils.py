@@ -33,7 +33,7 @@ def text_under_image(image: np.ndarray, text: str, text_color: Tuple[int, int, i
     cv2.putText(img, text, (text_x, text_y ), font, 1, text_color, 2)
     return img
 
-
+img_count=0
 def view_images(images, num_rows=1, offset_ratio=0.02):
     if type(images) is list:
         num_empty = len(images) % num_rows
@@ -57,13 +57,25 @@ def view_images(images, num_rows=1, offset_ratio=0.02):
             image_[i * (h + offset): i * (h + offset) + h:, j * (w + offset): j * (w + offset) + w] = images[
                 i * num_cols + j]
 
-    pil_img = Image.fromarray(image_)
-    display(pil_img)
+    #pil_img = Image.fromarray(image_)
+    #display(pil_img)
     '''To display the image in a Jupyter notebook or other interactive environment, you need to convert it to a PIL Image object first. This is because the display() function in Jupyter notebooks can only display PIL Image objects.'''
+
+    #save 
+    from datetime import datetime
+    import os
+    current_time = datetime.now()
+    global img_count
+    img_count += 1
     
-    
-    # plt.imshow(image_)
-    # plt.show()
+    file_name = current_time.strftime("%Y%m%d_%H%M%S") +'_'+str(img_count)+ ".jpg"
+    rgb_image_ = cv2.cvtColor(image_, cv2.COLOR_BGR2RGB)
+    folder_path = "visualization_imgs"
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    img_path=os.path.join(folder_path,file_name)
+    cv2.imwrite(img_path,rgb_image_)
+
     
 
 
